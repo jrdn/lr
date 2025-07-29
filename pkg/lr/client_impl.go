@@ -127,7 +127,7 @@ func (c *clientImpl) ParameterDefault(name string) (*ParameterValue, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &ParameterValue{resp.Response[0]}, err
+	return &ParameterValue{x: resp.Response[0]}, err
 }
 
 func (c *clientImpl) Increment(name string, amount float64) error {
@@ -151,13 +151,25 @@ func (c *clientImpl) ResetToDefault(name string) error {
 }
 
 func (c *clientImpl) GetValue(name string) (*ParameterValue, error) {
-	//TODO implement me
-	panic("implement me")
+	resp, err := do[AnyResponse](c, &Request{
+		Message: "getValue",
+		Params:  params(name),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &ParameterValue{x: resp.Response[0]}, err
 }
 
 func (c *clientImpl) SetValue(name string, value *ParameterValue) error {
-	//TODO implement me
-	panic("implement me")
+	val, err := value.Value()
+	if err != nil {
+		return err
+	}
+	return doNoResponse(c, &Request{
+		Message: "setValue",
+		Params:  params(name, val),
+	})
 }
 
 /* lazygen:template simpleOperation

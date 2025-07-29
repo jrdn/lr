@@ -62,9 +62,19 @@ func ParseView(s string) (View, error) {
 type Source string
 
 var (
-	SourceAll   Source = "all"
+	SourceAll   Source = "all_photos"
 	SourceTrash Source = "trash"
 )
+
+func ParseSource(s string) (Source, error) {
+	switch s {
+	case "all_photos", "all":
+		return SourceAll, nil
+	case "trash":
+		return SourceTrash, nil
+	}
+	return "", errors.New("unknown source")
+}
 
 type ParameterName string
 
@@ -85,24 +95,36 @@ func NewParameterValue(x any) *ParameterValue {
 }
 
 type ParameterValue struct {
-	x any
+	x       any
+	Number  *float64 `json:"number,omitempty"`
+	Boolean *bool    `json:"boolean,omitempty"`
+	String  *string  `json:"string,omitempty"`
 }
 
-func (pv ParameterValue) Number() (float64, error) {
+func (pv ParameterValue) GetNumber() (float64, error) {
+	if pv.Number != nil {
+		return *pv.Number, nil
+	}
 	if n, ok := pv.x.(float64); ok {
 		return n, nil
 	}
 	return 0, errors.New("not a number")
 }
 
-func (pv ParameterValue) Boolean() (bool, error) {
+func (pv ParameterValue) GetBoolean() (bool, error) {
+	if pv.Boolean != nil {
+		return *pv.Boolean, nil
+	}
 	if b, ok := pv.x.(bool); ok {
 		return b, nil
 	}
 	return false, errors.New("not a boolean")
 }
 
-func (pv ParameterValue) String() (string, error) {
+func (pv ParameterValue) GetString() (string, error) {
+	if pv.String != nil {
+		return *pv.String, nil
+	}
 	if s, ok := pv.x.(string); ok {
 		return s, nil
 	}
@@ -110,5 +132,14 @@ func (pv ParameterValue) String() (string, error) {
 }
 
 func (pv ParameterValue) Value() (any, error) {
+	if pv.Number != nil {
+		return *pv.Number, nil
+	}
+	if pv.Boolean != nil {
+		return *pv.Boolean, nil
+	}
+	if pv.String != nil {
+		return *pv.String, nil
+	}
 	return pv.x, nil
 }

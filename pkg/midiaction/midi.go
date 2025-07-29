@@ -1,11 +1,11 @@
 package midiaction
 
 import (
-	"github.com/go-vgo/robotgo"
-	"github.com/jrdn/lr/pkg/lr"
-	"github.com/jrdn/lr/pkg/midiaction/debounce"
 	"log/slog"
 	"time"
+
+	"github.com/jrdn/lr/pkg/lr"
+	"github.com/jrdn/lr/pkg/midiaction/debounce"
 )
 
 // TODO this debouncer sucks because it only invokes the function when it stops getting called
@@ -76,25 +76,6 @@ var upDownDebounce = debounce.New(50*time.Millisecond, "updown")
 
 var ccActionMap CCActionMapping = map[uint8]map[uint8]MidiAction{
 	0: {
-		38: func(c lr.Client, value uint8) {
-			upDownDebounce(func() {
-				if value > 64 {
-					logErr(robotgo.KeyTap("up"))
-				} else {
-					logErr(robotgo.KeyTap("down"))
-				}
-			})
-		},
-		57: func(c lr.Client, value uint8) {
-			upDownDebounce(func() {
-				if value > 64 {
-					logErr(robotgo.KeyTap("up"))
-				} else {
-					logErr(robotgo.KeyTap("down"))
-				}
-			})
-		},
-
 		exposureKnob: func(c lr.Client, value uint8) {
 			exposureDebounce(func() {
 				if value > 64 {
