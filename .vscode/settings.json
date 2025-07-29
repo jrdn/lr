@@ -1,0 +1,10 @@
+{
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "/Users/jrdn/.local/share/mise/shims/node"
+  },
+  "go.goroot": "/Users/jrdn/.local/share/mise/installs/go/1.25.1",
+  "go.alternateTools": {
+    "go": "/Users/jrdn/.local/share/mise/shims/go",
+    "gopls": "/Users/jrdn/.local/share/mise/shims/gopls"
+  }
+}
