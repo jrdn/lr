@@ -68,7 +68,7 @@ var (
 
 func logErr(err error) {
 	if err != nil {
-		slog.Error("lr error", err)
+		slog.Error("lr error", "err", err)
 	}
 }
 
